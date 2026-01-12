@@ -1,0 +1,68 @@
+/*
+ * Company: Robinhood
+ * Title: Cities With Completed Trades
+ * 
+ * Assume you're given the tables containing completed trade orders and user details in a Robinhood trading system.
+ * 
+ * Write a query to retrieve the top three cities that have the highest number of completed trade orders listed in descending order.
+ * Output the city name and the corresponding number of completed trade orders.
+ */
+
+-- Create type "trade_status_list"
+create type trade_status_list as enum(
+	'Completed',
+	'Cancelled'
+);
+
+-- Create table "users"
+create table users(
+	user_id integer primary key,
+	city text,
+	email text,
+	signup_date timestamp
+);
+
+-- Create table "trades"
+create table trades(
+	order_id integer primary key,
+	user_id integer references users,
+	quantity integer,
+	status trade_status_list,
+	price decimal(5, 2) 
+);
+
+-- Insert sample values into "users" table
+insert into users
+values
+	(111, 'San Francisco', 'rrok10@gmail.com', '2021-08-03 12:00:00'),
+	(148, 'Boston', 'sailor9820@gmail.com', '2021-08-20 12:00:00'),
+	(178, 'San Francisco', 'harrypotterfan182@gmail.com', '2022-01-05 12:00:00'),
+	(265, 'Denver', 'shadower_@hotmail.com', '2022-02-26 12:00:00'),
+	(300, 'San Francisco', 'houstoncowboy1122@hotmail.com', '2022-06-30 12:00:00'),
+	(488, 'New York', 'empire_state78@outlook.com', '2022-07-03 12:00:00');
+
+-- Insert sample values into "trades" table
+insert into trades
+values
+	(100101, 111, 10, 'Cancelled', 9.80),
+	(100102, 111, 10, 'Completed', 10.00),
+	(100264, 148, 40, 'Completed', 4.80),
+	(100305, 300, 15, 'Completed', 10.00),
+	(100909, 488, 1, 'Completed', 6.50),
+	(100259, 148, 35, 'Completed', 5.10),
+	(100900, 148, 50, 'Completed', 9.78),
+	(101432, 265, 10, 'Completed', 13.00),
+	(102533, 488, 25, 'Cancelled', 22.40),
+	(100565, 265, 2, 'Completed', 8.70),
+	(100400, 178, 32, 'Completed', 12.00),
+	(100777, 178, 60, 'Completed', 3.56);
+
+-- Solution
+select city, count(order_id) total_orders
+from trades
+join users
+using(user_id)
+where status = 'Completed'
+group by city
+order by total_orders desc
+limit 3;
