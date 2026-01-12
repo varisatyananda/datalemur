@@ -1,0 +1,41 @@
+/*
+ * Company: Tesla
+ * Title: Unfinished Part
+ * 
+ * Tesla is investigating production bottlenecks and they need your help to extract the relevant data.
+ * Write a query to determine which parts have begun the assembly process but are not yet finished.
+ * 
+ * Assumptions:
+ * parts_assembly table contains all parts currently in production, each at varying stages of the assembly process.
+ * An unfinished part is one that lacks a finish_date.
+ */
+
+-- Create table "parts_assembly"
+create table parts_assembly(
+	part text,
+	finish_date timestamp,
+	assembly_step integer
+);
+
+-- Insert sample values into "parts_assembly" table
+insert into parts_assembly
+values
+	('battery', '2022-01-22 00:00:00', 1),
+	('battery', '2022-02-22 00:00:00', 2),
+	('battery', '2022-03-22 00:00:00', 3),
+	('bumper', '2022-01-22 00:00:00', 1),
+	('bumper', '2022-02-22 00:00:00', 2),
+	('bumper', null, 3),
+	('bumper', null, 4),
+	('door', '2022-01-22 00:00:00', 1),
+	('door', '2022-02-22 00:00:00', 2),
+	('engine', '2022-01-01 00:00:00', 1),
+	('engine', '2022-01-25 00:00:00', 2),
+	('engine', '2022-02-28 00:00:00', 3),
+	('engine', '2022-04-01 00:00:00', 4),
+	('engine', null, 5);
+
+-- Solution
+select part, assembly_step
+from parts_assembly
+where finish_date is null;
