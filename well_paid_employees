@@ -1,0 +1,45 @@
+/*
+ * Company: FAANG
+ * Title: Well Paid Employees
+ * 
+ * Companies often perform salary analyses to ensure fair compensation practices.
+ * One useful analysis is to check if there are any employees earning more than their direct managers.
+ * 
+ * As a HR Analyst, you're asked to identify all employees who earn more than their direct managers.
+ * The result should include the employee's ID and name.
+ */
+
+-- Create table "employee"
+create table employee(
+	employee_id integer primary key,
+	name text,
+	salary integer,
+	department_id integer,
+	manager_id integer
+);
+
+-- Insert sample values into "employee" table
+insert into employee
+values
+	(1, 'Emma Thompson', 3800, 1, 6),
+	(2, 'Daniel Rodriguez', 2230, 1, 7),
+	(3, 'Olivia Smith', 7000, 1, 8),
+	(4, 'Noah Johnson', 6800, 2, 9),
+	(5, 'Sophia Martinez', 1750, 1, 11),
+	(6, 'Liam Brown', 13000, 3, null),
+	(7, 'Ava Garcia', 12500, 3, null),
+	(8, 'William Davis', 6800, 2, null),
+	(9, 'Isabella Wilson', 11000, 3, null),
+	(10, 'James Anderson', 4000, 1, 11),
+	(11, 'Mia Taylor', 10800, 3, null),
+	(12, 'Benjamin Hernandez', 9500, 3, 8),
+	(13, 'Charlotte Miller', 7000, 2, 6),
+	(14, 'Logan Moore', 8000, 2, 6),
+	(15, 'Amelia Lee', 4000, 1, 7);
+
+-- Solution
+select manager.employee_id, manager.name employee_name
+from employee manager
+join employee employee
+on manager.manager_id = employee.employee_id
+where manager.salary > employee.salary;
